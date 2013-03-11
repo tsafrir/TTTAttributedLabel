@@ -84,7 +84,16 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(TTTAttributed
 
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.alignment = label.textAlignment;
-        paragraphStyle.lineBreakMode = label.lineBreakMode;
+        
+        NSLineBreakMode lineBreakMode;
+        if (label.numberOfLines != 1) {
+            // required for tail truncation to work with numberOfLines > 0
+            lineBreakMode = NSLineBreakByWordWrapping;
+        } else {
+            lineBreakMode = label.lineBreakMode;
+        }
+        paragraphStyle.lineBreakMode = lineBreakMode;
+        
         paragraphStyle.lineSpacing = label.leading;
         paragraphStyle.lineHeightMultiple = label.lineHeightMultiple;
         paragraphStyle.firstLineHeadIndent = label.firstLineIndent;
